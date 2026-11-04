@@ -640,7 +640,7 @@
             </tr>
             <tr>
               <td class="key">Exclusions &amp; Opt-Out</td>
-              <td>All RFC 1918 / Bogon ranges are automatically blocked; CIDR opt-outs processed within <strong>48 hours</strong></td>
+              <td>Standard bogon ranges are permanently blocked; CIDR opt-outs are processed manually within <strong>48 hours</strong></td>
             </tr>
             <tr>
               <td class="key">Contact &amp; Abuse Desk</td>
@@ -756,7 +756,7 @@
             <tr>
               <td class="key"><code>0.0.0.0/8</code></td>
               <td>16,777,216</td>
-              <td>Current network / "This host" (RFC 1122)</td>
+              <td>Non-routable source addresses (RFC 1122)</td>
             </tr>
             <tr>
               <td class="key"><code>10.0.0.0/8</code></td>
@@ -776,7 +776,7 @@
             <tr>
               <td class="key"><code>169.254.0.0/16</code></td>
               <td>65,536</td>
-              <td>Link-Local / Auto-IP (RFC 3927)</td>
+              <td>Link-Local (RFC 3927)</td>
             </tr>
             <tr>
               <td class="key"><code>172.16.0.0/12</code></td>
@@ -931,7 +931,7 @@
       <div class="callout callout-info">
         <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         <div>
-          <strong>Automatic Bogon Exclusions:</strong> All RFC 1918 private spaces (<code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, <code>192.168.0.0/16</code>), Loopback (<code>127.0.0.0/8</code>), Link-Local (<code>169.254.0.0/16</code>), CGNAT (<code>100.64.0.0/10</code>), Documentation nets (<code>192.0.2.0/24</code>, <code>198.51.100.0/24</code>, <code>203.0.113.0/24</code>), Multicast, and Reserved ranges are permanently excluded by default.
+          <strong>Manual Verification &amp; Processing:</strong> Every opt-out request is reviewed and handled manually by the maintainer. Your requested CIDR block is entered into our master <code>config/optout.txt</code> exclusion list, and any prior historical telemetry is manually purged from our database within <strong>48 hours</strong>.
         </div>
       </div>
 
@@ -940,7 +940,7 @@
         <li>Send an email to <strong><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=jemishcertbar@gmail.com&amp;su=Scanner%20Opt-Out%20Request" target="_blank" rel="noopener">jemishcertbar@gmail.com</a></strong> with the subject <code>Scanner Opt-Out Request</code>.</li>
         <li>Specify the exact IP address(es) or CIDR block(s) you wish to exclude (for example, <code>198.51.100.0/24</code> or <code>203.0.113.45</code>).</li>
         <li>We will add your ranges to our master <code>config/optout.txt</code> blocklist and manually delete any historical records from the database within <strong>48 hours</strong>, confirming by reply.</li>
-        <li>Once added, our target generator automatically filters out the entire range prior to random permutation. No packets will ever be dispatched to those addresses in future discovery cycles.</li>
+        <li>Once your range is manually registered in our blocklist, it is permanently dropped before target generation. No packets will ever be dispatched to those addresses in future discovery cycles.</li>
       </ol>
 
       <div style="margin-top: 18px;">
