@@ -1,112 +1,1048 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Research Scanner Info</title>
-<meta name="description" content="Information about an independent network research scanner, what it does, and how to opt out.">
-<style>
-  :root { --bg:#fafafa; --fg:#1d1d1f; --muted:#5f6368; --card:#fff; --line:#e3e3e6; --accent:#1a5fb4; }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg:#141517; --fg:#ececee; --muted:#9aa0a6; --card:#1c1d20; --line:#2e3035; --accent:#6ea8fe; }
-  }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  main { max-width:760px; margin:0 auto; padding:32px 16px 64px; }
-  h1 { font-size:1.8rem; margin:0 0 4px; }
-  h2 { font-size:1.2rem; margin:0 0 10px; }
-  .sub { color:var(--muted); margin:0 0 24px; }
-  section { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px 20px; margin:16px 0; }
-  ul { margin:8px 0 0; padding-left:20px; }
-  li { margin:4px 0; }
-  code { background:var(--bg); border:1px solid var(--line); border-radius:4px; padding:1px 6px; font-size:.92em; word-break:break-all; }
-  a { color:var(--accent); }
-  table { width:100%; border-collapse:collapse; margin-top:8px; }
-  td { padding:8px 4px; border-top:1px solid var(--line); vertical-align:top; }
-  td:first-child { color:var(--muted); width:38%; }
-  .note { color:var(--muted); font-size:.9rem; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sencyc Research Scanner | Information & Opt-Out</title>
+  <meta name="description" content="Technical information, traffic identification guidelines, safety architecture, and permanent opt-out instructions for the Sencyc Network Research Scanner operated by Jemish Certbar.">
+  <meta name="author" content="Jemish Certbar">
+  <meta name="robots" content="index, follow">
+
+  <script>
+    // Initialize theme immediately to prevent screen flash
+    (function() {
+      const savedTheme = localStorage.getItem('sencyc-theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-subtle: #f1f5f9;
+      --border: #e2e8f0;
+      --border-subtle: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-light: #64748b;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-surface: #eff6ff;
+      --success: #15803d;
+      --success-surface: #f0fdf4;
+      --danger: #b91c1c;
+      --danger-surface: #fef2f2;
+      --warning: #b45309;
+      --warning-surface: #fffbeb;
+      --code-bg: #f8fafc;
+      --code-border: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --radius: 10px;
+      --radius-sm: 6px;
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b0f17;
+      --surface: #131b26;
+      --surface-subtle: #1a2332;
+      --border: #263346;
+      --border-subtle: #33445c;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-light: #64748b;
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --primary-surface: rgba(59, 130, 246, 0.12);
+      --success: #22c55e;
+      --success-surface: rgba(34, 197, 94, 0.12);
+      --danger: #ef4444;
+      --danger-surface: rgba(239, 68, 68, 0.12);
+      --warning: #f59e0b;
+      --warning-surface: rgba(245, 158, 11, 0.12);
+      --code-bg: #0e1520;
+      --code-border: #263346;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    /* Top Navigation Bar */
+    header.top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .top-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .brand-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: var(--success-surface);
+      color: var(--success);
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Dark Mode Toggle Button */
+    .theme-toggle {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .theme-toggle svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Main Container */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 36px 20px 80px;
+    }
+
+    /* Hero Section */
+    .hero {
+      margin-bottom: 28px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      background: var(--primary-surface);
+      color: var(--primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 2.15rem;
+      line-height: 1.25;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .lead {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* Card Panels */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+    }
+
+    h2 .icon {
+      color: var(--primary);
+      display: inline-flex;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 18px 0 8px;
+      color: var(--text);
+    }
+
+    p {
+      margin-bottom: 12px;
+      color: var(--text-muted);
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    ul, ol {
+      margin: 8px 0 14px 22px;
+      color: var(--text-muted);
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    strong {
+      color: var(--text);
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.15s ease;
+    }
+
+    a:hover {
+      color: var(--primary-hover);
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      color: var(--text);
+      word-break: break-all;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .feature-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      background: var(--surface-subtle);
+    }
+
+    .feature-box.positive {
+      border-left: 4px solid var(--success);
+    }
+
+    .feature-box.negative {
+      border-left: 4px solid var(--danger);
+    }
+
+    .feature-box h4 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-box.positive h4 { color: var(--success); }
+    .feature-box.negative h4 { color: var(--danger); }
+
+    .feature-box ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 0.94rem;
+    }
+
+    .feature-box li {
+      margin-bottom: 5px;
+    }
+
+    /* Tables */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      margin: 14px 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.94rem;
+    }
+
+    th, td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--surface-subtle);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: var(--surface-subtle);
+    }
+
+    td.key {
+      font-weight: 600;
+      color: var(--text);
+      width: 32%;
+      min-width: 150px;
+    }
+
+    /* Callout Boxes */
+    .callout {
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      margin: 16px 0;
+      display: flex;
+      gap: 14px;
+      font-size: 0.95rem;
+    }
+
+    .callout-info {
+      background: var(--primary-surface);
+      border: 1px solid var(--primary);
+      color: var(--text);
+    }
+
+    .callout-warning {
+      background: var(--warning-surface);
+      border: 1px solid var(--warning);
+      color: var(--text);
+    }
+
+    .callout-icon {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      margin-top: 2px;
+    }
+
+    /* Port Badges */
+    .port-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0 16px;
+    }
+
+    .port-pill {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      padding: 3px 8px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .port-pill span {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    /* Opt-out Action Button */
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: #ffffff !important;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-top: 10px;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-action:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-action svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* Copy snippet box */
+    .snippet-box {
+      position: relative;
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin: 10px 0;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      word-break: break-all;
+    }
+
+    .btn-copy {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 8px;
+      flex-shrink: 0;
+      font-family: var(--font);
+    }
+
+    .btn-copy:hover {
+      background: var(--surface-subtle);
+      border-color: var(--primary);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      margin-top: 36px;
+      font-size: 0.88rem;
+      color: var(--text-light);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 1.7rem; }
+      .lead { font-size: 1rem; }
+      .card { padding: 18px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      td.key { width: 100%; display: block; padding-bottom: 2px; }
+      td { display: block; padding-top: 2px; }
+      tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+      tr:last-child { border-bottom: none; }
+    }
+  </style>
 </head>
 <body>
-<main>
 
-<h1>Research Scanner Information</h1>
-<p class="sub">If you found this page from your server logs, this is an independent, small-scale network research project. It is not an attack, and you can opt out at any time.</p>
+  <!-- Top Sticky Bar -->
+  <header class="top-bar">
+    <div class="top-container">
+      <a href="#" class="brand" aria-label="Sencyc Research Scanner Home">
+        <div class="brand-logo">S</div>
+        <span>Sencyc Scanner</span>
+      </a>
+      <div class="controls">
+        <div class="status-pill" title="Scanner status: Active low-rate research">
+          <span class="status-dot"></span>
+          <span>Phase 1 Discovery</span>
+        </div>
+        <button id="themeToggleBtn" class="theme-toggle" type="button" aria-label="Toggle light and dark mode">
+          <svg id="themeIcon" viewBox="0 0 24 24">
+            <!-- Default icon set dynamically by JS -->
+          </svg>
+          <span id="themeLabel">Theme</span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-<section>
-  <h2>What is this?</h2>
-  <p>
-    I'm <strong>Jemish Certbar</strong>, an individual developer building my own network scanner as a learning and research project.
-    It checks which TCP ports are reachable on public IP addresses and identifies the type of service running (for example, a web server or SSH).
-    The scan volume is small and runs at a low, throttled rate.
-  </p>
-</section>
+  <main>
+    <!-- Hero / Introduction -->
+    <header class="hero">
+      <div class="hero-meta">
+        <span class="tag">Network Measurement</span>
+        <span class="tag">Academic &amp; Independent Research</span>
+        <span class="tag">RFC Compliant</span>
+      </div>
+      <h1>Network Research Scanner Information</h1>
+      <p class="lead">
+        If you discovered this URL in your firewall logs, NetFlow exports, or network packet captures,
+        this page provides full transparency regarding our discovery scans, traffic signatures,
+        and instructions to immediately exclude your networks.
+      </p>
+    </header>
 
-<section>
-  <h2>What the scanner does</h2>
-  <ul>
-    <li>Opens a normal TCP connection to a limited set of common ports.</li>
-    <li>Reads the service banner, or sends one harmless request (for example, HTTP <code>HEAD /</code> or a TLS handshake).</li>
-    <li>Records whether the port is open, the banner, and basic service/OS hints.</li>
-    <li>Targets are chosen in random order and rate-limited, so any single network sees very little traffic.</li>
-  </ul>
-</section>
+    <!-- At A Glance Summary Table -->
+    <section class="card">
+      <h2>
+        <span class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </span>
+        Quick Summary &amp; Overview
+      </h2>
+      <p>
+        This is an independent network measurement and protocol research project operated by <strong>Jemish Certbar</strong>.
+        The goal is mapping public IPv4 service accessibility, measuring Internet protocol adoption, and testing high-efficiency discovery algorithms.
+      </p>
 
-<section>
-  <h2>What the scanner does NOT do</h2>
-  <ul>
-    <li>No exploitation or vulnerability attacks.</li>
-    <li>No password guessing or login attempts.</li>
-    <li>No denial-of-service or high-volume traffic.</li>
-    <li>No attempt to access, modify, or download your data.</li>
-  </ul>
-</section>
+      <div class="table-responsive">
+        <table>
+          <tbody>
+            <tr>
+              <td class="key">Operator / Researcher</td>
+              <td><strong>Jemish Certbar</strong> (Individual Security Researcher &amp; Developer)</td>
+            </tr>
+            <tr>
+              <td class="key">Project Engine</td>
+              <td><strong>Sencyc Discovery Cycle</strong> (Go / Phase 1 Discovery Engine, v0.1.0)</td>
+            </tr>
+            <tr>
+              <td class="key">Active Probe Protocols</td>
+              <td><strong>ICMP Echo</strong> (Host Discovery Ping) &amp; <strong>TCP Connect</strong> (3-Way Handshake)</td>
+            </tr>
+            <tr>
+              <td class="key">Target Order</td>
+              <td><strong>Globally pseudo-randomized</strong> via Feistel permutation; no subnet flooding or sequential sweeps</td>
+            </tr>
+            <tr>
+              <td class="key">ICMP Payload Signature</td>
+              <td><code>sencyc-scanner https://jemishcertbar.github.io/scanner-info/</code></td>
+            </tr>
+            <tr>
+              <td class="key">Exclusions &amp; Opt-Out</td>
+              <td>All RFC 1918 / Bogon ranges are automatically blocked; CIDR opt-outs processed within <strong>48 hours</strong></td>
+            </tr>
+            <tr>
+              <td class="key">Contact &amp; Abuse Desk</td>
+              <td><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=jemishcertbar@gmail.com" target="_blank" rel="noopener">jemishcertbar@gmail.com</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-<section>
-  <h2>How to identify my traffic</h2>
-  <table>
-    <tr><td>HTTP User-Agent</td><td><code>MyResearchScanner/0.1 (+https://jemishcertbar.github.io/scanner-info/)</code></td></tr>
-    <tr><td>Scan type</td><td>TCP connect, banner grab</td></tr>
-    <tr><td>Rate</td><td>Low (about 1000 connections/second overall)</td></tr>
-    <tr><td>Scan windows</td><td>occasional, mostly morning and afternoon UTC+05:30</td></tr>
-  </table>
-</section>
+    <!-- Scanner Behavior: Does vs Does NOT Do -->
+    <section class="card">
+      <h2>
+        <span class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </span>
+        Safety Guarantee &amp; Scanning Policies
+      </h2>
+      <p>
+        The scanner is engineered from the ground up for minimal footprint and maximum courtesy.
+        It is designed strictly to observe service presence without testing security postures or generating load.
+      </p>
 
-<section>
-  <h2>Data collected and how it's used</h2>
-  <ul>
-    <li>Stored: IP, port, open/closed status, service banner, timestamp.</li>
-    <li>Used only to test and improve my scanner's accuracy.</li>
-    <li>Stored privately on my own machine. Not sold, published, or shared with third parties.</li>
-    <li>Data for opted-out addresses is deleted on request.</li>
-  </ul>
-</section>
+      <div class="grid-2">
+        <div class="feature-box positive">
+          <h4>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            What The Scanner DOES
+          </h4>
+          <ul>
+            <li><strong>ICMP Echo Probes:</strong> Sends standard ping packets carrying our identification URL.</li>
+            <li><strong>TCP Connect Handshake:</strong> Establishes a standard TCP handshake (SYN &rarr; SYN/ACK &rarr; ACK) and <strong>closes immediately</strong>.</li>
+            <li><strong>Port Status Classification:</strong> Records port status (<code>open</code>, <code>closed</code>, or <code>no_response</code>).</li>
+            <li><strong>Permuted IP Ordering:</strong> Randomizes targets so individual networks never experience sustained traffic bursts.</li>
+            <li><strong>Strict Exclusions:</strong> Drops all private, loopback, CGNAT, broadcast, and opted-out IP ranges prior to transmission.</li>
+          </ul>
+        </div>
 
-<section>
-  <h2>Opt out</h2>
-  <p>
-    <strong>Email:</strong>
-    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jemishcertbar@gmail.com&su=Scanner%20opt-out%20request"
-        target="_blank" rel="noopener">jemishcertbar@gmail.com</a>
-    <br>Please include the IP address or CIDR range (for example <code>203.0.113.0/24</code>) you want excluded.
-  </p>
-  <ul>
-    <li>Your range is added to my blocklist within <strong>48 hours</strong>, and I'll confirm by reply.</li>
-    <li>The blocklist is loaded at the start of every scan, and blocked addresses are never contacted.</li>
-    <li>Previously collected data for your range will be deleted on request.</li>
-  </ul>
-</section>
+        <div class="feature-box negative">
+          <h4>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            What The Scanner NEVER Does
+          </h4>
+          <ul>
+            <li><strong>No Exploits or Vulnerability Probing:</strong> Never sends exploit payloads, SQL injection tests, fuzz strings, or CVE checks.</li>
+            <li><strong>No Credential or Login Attempts:</strong> Never attempts to authenticate, test default passwords, or brute-force accounts.</li>
+            <li><strong>No Data Harvesting:</strong> Never scrapes websites, downloads files, or inspects application data.</li>
+            <li><strong>No Application Requests on TCP Discovery:</strong> No HTTP requests, TLS banner queries, or protocol negotiation during Phase 1 connect runs.</li>
+            <li><strong>No Denial-of-Service (DoS):</strong> No high-volume flooding, SYN spoofing, or amplification traffic.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
-<section>
-  <h2>Contact</h2>
-  <p>
-    Questions, concerns, or abuse reports: <a href="mailto:jemishcertbar@gmail.com">jemishcertbar@gmail.com</a>.
-    If my scanner is causing a problem, tell me, and I'll stop immediately.
-  </p>
-</section>
+    <!-- How to Identify Scanner Traffic -->
+    <section class="card">
+      <h2>
+        <span class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </span>
+        How to Identify My Traffic in Your Logs
+      </h2>
+      <p>
+        Network engineers and SOC analysts can verify probe origin using the following protocol characteristics:
+      </p>
 
-<p class="note">Last updated: 27-Oct-2026</p>
+      <h3>1. ICMP Echo (Ping) Traffic</h3>
+      <p>
+        Every ICMP Echo Request transmitted by our discovery scanner embeds our project signature inside the echo payload:
+      </p>
+      <div class="snippet-box">
+        <code id="icmpPayload">sencyc-scanner https://jemishcertbar.github.io/scanner-info/</code>
+        <button class="btn-copy" onclick="copyText('icmpPayload')">Copy Payload</button>
+      </div>
+      <p style="font-size:0.92rem;">
+        In Wireshark, <code>tcpdump</code>, or firewall packet captures, inspect the ICMP data field to find this exact string.
+        Furthermore, packet sequence and ID values are cryptographically keyed per IP address to discard rogue or spoofed responses.
+      </p>
 
-</main>
+      <h3>2. TCP Port Discovery Traffic</h3>
+      <ul>
+        <li><strong>Method:</strong> Standard OS TCP Connect (no raw packet spoofing, valid source IP).</li>
+        <li><strong>Data Transferred:</strong> <strong>0 bytes</strong> of application data. Once the connection completes (<code>ESTABLISHED</code>), the socket is immediately closed.</li>
+        <li><strong>Connection Rate:</strong> Probes are spread across different destination subnets. A single target IP will only see an isolated connection attempt per scanned port.</li>
+        <li><strong>Refused Ports:</strong> If your system sends a TCP RST (port closed), it is considered final and <strong>never retried</strong>.</li>
+      </ul>
+    </section>
+
+    <!-- Blocklist & Excluded IP Ranges -->
+    <section class="card">
+      <h2>
+        <span class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+        </span>
+        Blocklist &amp; Excluded IP Ranges
+      </h2>
+      <p>
+        Prior to any packet dispatch, all target addresses are verified against an extensive exclusion filter and blocklist.
+        In total, <strong>over 592 million IPv4 addresses</strong> (592,708,619 addresses, representing approximately <strong>13.8% of the entire IPv4 address space</strong>)
+        are permanently excluded from all scanning activities, ensuring private networks, critical routing infrastructure, and opted-out entities are never contacted:
+      </p>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Excluded Range / CIDR</th>
+              <th>Excluded IP Count</th>
+              <th>Allocation &amp; Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="key"><code>0.0.0.0/8</code></td>
+              <td>16,777,216</td>
+              <td>Current network / "This host" (RFC 1122)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>10.0.0.0/8</code></td>
+              <td>16,777,216</td>
+              <td>Private-Use Networks (RFC 1918)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>100.64.0.0/10</code></td>
+              <td>4,194,304</td>
+              <td>Shared Address Space / Carrier-Grade NAT (RFC 6598)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>127.0.0.0/8</code></td>
+              <td>16,777,216</td>
+              <td>Loopback &amp; Localhost (RFC 1122)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>169.254.0.0/16</code></td>
+              <td>65,536</td>
+              <td>Link-Local / Auto-IP (RFC 3927)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>172.16.0.0/12</code></td>
+              <td>1,048,576</td>
+              <td>Private-Use Networks (RFC 1918)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>192.0.0.0/24</code></td>
+              <td>256</td>
+              <td>IETF Protocol Assignments (RFC 6890)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>192.0.2.0/24</code></td>
+              <td>256</td>
+              <td>Documentation TEST-NET-1 (RFC 5737)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>192.88.99.0/24</code></td>
+              <td>256</td>
+              <td>6to4 Relay Anycast (RFC 3068)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>192.168.0.0/16</code></td>
+              <td>65,536</td>
+              <td>Private-Use Networks (RFC 1918)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>198.18.0.0/15</code></td>
+              <td>131,072</td>
+              <td>Benchmark Device Interconnect (RFC 2544)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>198.51.100.0/24</code>, <code>203.0.113.0/24</code></td>
+              <td>512</td>
+              <td>Documentation TEST-NET-2 &amp; TEST-NET-3 (RFC 5737)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>224.0.0.0/4</code></td>
+              <td>268,435,456</td>
+              <td>Multicast Addresses (RFC 5771 / Class D)</td>
+            </tr>
+            <tr>
+              <td class="key"><code>240.0.0.0/4</code> &amp; <code>255.255.255.255/32</code></td>
+              <td>268,435,457</td>
+              <td>Reserved for Future Use / Limited Broadcast (RFC 1112 / Class E)</td>
+            </tr>
+            <tr>
+              <td class="key">Opt-Out Requests (<code>optout.txt</code>)</td>
+              <td>Dynamic</td>
+              <td>Administrator-requested CIDR exclusions &amp; autonomous systems</td>
+            </tr>
+            <tr>
+              <td class="key"><strong>Total Excluded Space</strong></td>
+              <td><strong>592,708,619+ IPs</strong></td>
+              <td><strong>~13.8% of entire IPv4 address space permanently excluded</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Target Permutation & Rate Control Architecture -->
+    <section class="card">
+      <h2>
+        <span class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        </span>
+        Network Safety &amp; Rate Limiting Architecture
+      </h2>
+      <p>
+        To protect target infrastructure and avoid false positives on security monitoring systems, our master engine implements multi-layered safety controls:
+      </p>
+
+      <ul>
+        <li>
+          <strong>Keyed Pseudo-Random Permutation (Feistel Network with Cycle Walking):</strong>
+          Instead of scanning sequential blocks (e.g. <code>192.0.2.1</code> then <code>192.0.2.2</code>), target addresses are mathematically permuted across the entire IPv4 space. Any single autonomous system (AS) or subnet receives probes at long, randomized intervals.
+        </li>
+        <li>
+          <strong>Strict Token-Bucket Rate Limiter:</strong>
+          Packet generation is strictly bounded by a token-bucket rate limiter to prevent network congestion or flooding.
+        </li>
+        <li>
+          <strong>Connection Slot Limiting:</strong>
+          Simultaneous in-flight connections are bounded between 16 and 4,096 sockets to prevent local socket exhaustion or upstream router table degradation.
+        </li>
+        <li>
+          <strong>Immediate Signal Kill-Switch:</strong>
+          Scans monitor OS termination signals (<code>SIGINT</code>, <code>SIGTERM</code>) and checkpoint file status (<code>config/STOP</code>) to halt all packet dispatch immediately when signaled.
+        </li>
+      </ul>
+    </section>
+
+    <!-- Data Collection & Privacy Policy -->
+    <section class="card">
+      <h2>
+        <span class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+        </span>
+        Data Collection, Storage &amp; Privacy Policy
+      </h2>
+      <p>
+        We practice strict data minimization. Our database records only the bare minimum technical telemetry required for research:
+      </p>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Attribute</th>
+              <th>Policy &amp; Handling</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="key">Data Recorded</td>
+              <td>Target IP address, Reachability flag (<code>found_by_icmp</code>, <code>found_by_tcp</code>), Port number (if open), and Scan timestamp.</td>
+            </tr>
+            <tr>
+              <td class="key">Data NOT Recorded</td>
+              <td><strong>NO</strong> hostnames, user credentials, application payloads, server contents, personal data, or vulnerability status.</td>
+            </tr>
+            <tr>
+              <td class="key">Storage Location</td>
+              <td>Private PostgreSQL database hosted on dedicated private development infrastructure. Accessible exclusively by the project maintainer.</td>
+            </tr>
+            <tr>
+              <td class="key">Commercial Use</td>
+              <td><strong>Zero commercialization.</strong> Collected discovery data is never sold, licensed, leased, or shared with commercial third parties.</td>
+            </tr>
+            <tr>
+              <td class="key">Data Deletion</td>
+              <td>All historical records associated with an IP address or CIDR range are manually deleted from the database by the maintainer upon processing an opt-out request.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Opt-Out Section -->
+    <section class="card" id="opt-out">
+      <h2>
+        <span class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+        </span>
+        Network Exclusion &amp; Permanent Opt-Out
+      </h2>
+      <p>
+        We fully respect the autonomy of network operators. If you manage an IP address, block, or Autonomous System and do not wish to be included in our research scans, you may request permanent exclusion at any time.
+      </p>
+
+      <div class="callout callout-info">
+        <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <div>
+          <strong>Automatic Bogon Exclusions:</strong> All RFC 1918 private spaces (<code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, <code>192.168.0.0/16</code>), Loopback (<code>127.0.0.0/8</code>), Link-Local (<code>169.254.0.0/16</code>), CGNAT (<code>100.64.0.0/10</code>), Documentation nets (<code>192.0.2.0/24</code>, <code>198.51.100.0/24</code>, <code>203.0.113.0/24</code>), Multicast, and Reserved ranges are permanently excluded by default.
+        </div>
+      </div>
+
+      <h3>How to Request an Opt-Out:</h3>
+      <ol>
+        <li>Send an email to <strong><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=jemishcertbar@gmail.com&amp;su=Scanner%20Opt-Out%20Request" target="_blank" rel="noopener">jemishcertbar@gmail.com</a></strong> with the subject <code>Scanner Opt-Out Request</code>.</li>
+        <li>Specify the exact IP address(es) or CIDR block(s) you wish to exclude (for example, <code>198.51.100.0/24</code> or <code>203.0.113.45</code>).</li>
+        <li>We will add your ranges to our master <code>config/optout.txt</code> blocklist and manually delete any historical records from the database within <strong>48 hours</strong>, confirming by reply.</li>
+        <li>Once added, our target generator automatically filters out the entire range prior to random permutation. No packets will ever be dispatched to those addresses in future discovery cycles.</li>
+      </ol>
+
+      <div style="margin-top: 18px;">
+        <a class="btn-action" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=jemishcertbar@gmail.com&amp;su=Scanner%20Opt-Out%20Request&amp;body=Hello%20Jemish,%0D%0A%0D%0APlease%20exclude%20the%20following%20IP%20address(es)%20or%20CIDR%20blocks%20from%20all%20future%20scanner%20runs:%0D%0A-%20[Insert%20IP%20or%20CIDR%20ranges%20here]%0D%0A%0D%0AThank%20you." target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          Send Opt-Out Email (Pre-filled)
+        </a>
+      </div>
+    </section>
+
+    <!-- Contact & Abuse Desk -->
+    <section class="card">
+      <h2>
+        <span class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        </span>
+        Contact &amp; Abuse Reporting
+      </h2>
+      <p>
+        If our traffic is causing an issue on your firewall, triggering false alarms, or if you have questions regarding the methodology or codebase, please contact the project maintainer directly:
+      </p>
+
+      <div class="table-responsive">
+        <table>
+          <tbody>
+            <tr>
+              <td class="key">Direct Email</td>
+              <td><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=jemishcertbar@gmail.com" target="_blank" rel="noopener">jemishcertbar@gmail.com</a></td>
+            </tr>
+            <tr>
+              <td class="key">Response Time</td>
+              <td>Within <strong>48 hours</strong> (Indian Standard Time, UTC+05:30)</td>
+            </tr>
+            <tr>
+              <td class="key">Immediate Action</td>
+              <td>If a legitimate operational problem is reported, scanning against the impacted network will be halted immediately upon notice.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>
+        <strong>Sencyc Network Research Project</strong> &bull; Operated by Jemish Certbar
+      </div>
+      <div>
+        Last Codebase Sync: <strong>04-Nov-2026</strong> (Phase 1 Master)
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Theme toggle functionality
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeLabel = document.getElementById('themeLabel');
+
+    const sunIcon = `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
+    const moonIcon = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
+
+    function updateThemeUI(theme) {
+      if (theme === 'dark') {
+        themeIcon.innerHTML = sunIcon;
+        themeLabel.textContent = 'Light Mode';
+        themeToggleBtn.setAttribute('title', 'Switch to light mode');
+      } else {
+        themeIcon.innerHTML = moonIcon;
+        themeLabel.textContent = 'Dark Mode';
+        themeToggleBtn.setAttribute('title', 'Switch to dark mode');
+      }
+    }
+
+    // Initialize UI based on current theme
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    updateThemeUI(currentTheme);
+
+    themeToggleBtn.addEventListener('click', function() {
+      const activeTheme = document.documentElement.getAttribute('data-theme');
+      const targetTheme = activeTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', targetTheme);
+      localStorage.setItem('sencyc-theme', targetTheme);
+      updateThemeUI(targetTheme);
+    });
+
+    // Helper for clipboard copying
+    function copyText(elementId) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const text = el.innerText || el.textContent;
+      navigator.clipboard.writeText(text).then(function() {
+        const btn = event.currentTarget || event.target;
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(function() {
+          btn.textContent = originalText;
+        }, 2000);
+      }).catch(function(err) {
+        console.error('Clipboard copy failed: ', err);
+      });
+    }
+  </script>
 </body>
 </html>
