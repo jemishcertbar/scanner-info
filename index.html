@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sencyc Research Scanner | Information & Opt-Out</title>
-  <meta name="description" content="Technical information, traffic identification guidelines, safety architecture, and permanent opt-out instructions for the Sencyc Network Research Scanner operated by Jemish Certbar.">
+  <title>Exposia Research Scanner | Information & Opt-Out</title>
+  <meta name="description" content="Technical information, traffic identification guidelines, safety architecture, and permanent opt-out instructions for the Exposia Network Research Scanner operated by Jemish Certbar.">
   <meta name="author" content="Jemish Certbar">
   <meta name="robots" content="index, follow">
 
   <script>
     // Initialize theme immediately to prevent screen flash
     (function() {
-      const savedTheme = localStorage.getItem('sencyc-theme');
+      const savedTheme = localStorage.getItem('exposia-theme');
       if (savedTheme) {
         document.documentElement.setAttribute('data-theme', savedTheme);
       } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -567,9 +567,9 @@
   <!-- Top Sticky Bar -->
   <header class="top-bar">
     <div class="top-container">
-      <a href="#" class="brand" aria-label="Sencyc Research Scanner Home">
+      <a href="#" class="brand" aria-label="Exposia Research Scanner Home">
         <div class="brand-logo">S</div>
-        <span>Sencyc Scanner</span>
+        <span>Exposia Scanner</span>
       </a>
       <div class="controls">
         <div class="status-pill" title="Scanner status: Active low-rate research">
@@ -624,7 +624,7 @@
             </tr>
             <tr>
               <td class="key">Project Engine</td>
-              <td><strong>Sencyc Discovery Cycle</strong> (Go / Phase 1 Discovery Engine, v0.1.0)</td>
+              <td><strong>Exposia Discovery Cycle</strong> (Go / Phase 1 Discovery Engine, v0.1.0)</td>
             </tr>
             <tr>
               <td class="key">Active Probe Protocols</td>
@@ -636,7 +636,7 @@
             </tr>
             <tr>
               <td class="key">ICMP Payload Signature</td>
-              <td><code>sencyc-scanner https://jemishcertbar.github.io/scanner-info/</code></td>
+              <td><code>exposia-scanner https://jemishcertbar.github.io/scanner-info/</code></td>
             </tr>
             <tr>
               <td class="key">Exclusions &amp; Opt-Out</td>
@@ -712,7 +712,7 @@
         Every ICMP Echo Request transmitted by our discovery scanner embeds our project signature inside the echo payload:
       </p>
       <div class="snippet-box">
-        <code id="icmpPayload">sencyc-scanner https://jemishcertbar.github.io/scanner-info/</code>
+        <code id="icmpPayload">exposia-scanner https://jemishcertbar.github.io/scanner-info/</code>
         <button class="btn-copy" onclick="copyText('icmpPayload')">Copy Payload</button>
       </div>
       <p style="font-size:0.92rem;">
@@ -986,7 +986,7 @@
     <!-- Footer -->
     <footer>
       <div>
-        <strong>Sencyc Network Research Project</strong> &bull; Operated by Jemish Certbar
+        <strong>Exposia Network Research Project</strong> &bull; Operated by Jemish Certbar
       </div>
       <div>
         Last Codebase Sync: <strong>04-Nov-2026</strong> (Phase 1 Master)
@@ -1023,7 +1023,7 @@
       const activeTheme = document.documentElement.getAttribute('data-theme');
       const targetTheme = activeTheme === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', targetTheme);
-      localStorage.setItem('sencyc-theme', targetTheme);
+      localStorage.setItem('exposia-theme', targetTheme);
       updateThemeUI(targetTheme);
     });
 
